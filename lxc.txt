@@ -1,0 +1,48 @@
+1、映射Docker需要的权限给Lxc，否则docker无法使用
+
+nano /etc/pve/lxc/100.conf
+
+lxc.apparmor.profile: unconfined
+lxc.cgroup.devices.allow: a
+lxc.cap.drop:
+
+ctrl+x  y 回车退出
+
+2、开启Debian远程root账号第三方SSH登录工具
+
+nano /etc/ssh/sshd_config
+
+PermitRootLogin yes
+
+PasswordAuthentication yes
+
+ctrl+x，y，回车
+
+service ssh restart
+
+3、Lxc下Debian更改国内源：
+
+备份源存储文件：mv /etc/apt/sources.list /etc/apt/sources.list.bk
+nano /etc/apt/sources.list
+
+添加国内源
+
+# 中科大源
+deb https://mirrors.ustc.edu.cn/debian/ bullseye main non-free contrib
+deb-src https://mirrors.ustc.edu.cn/debian/ bullseye main non-free contrib
+deb https://mirrors.ustc.edu.cn/debian-security/ bullseye-security main
+deb-src https://mirrors.ustc.edu.cn/debian-security/ bullseye-security main
+deb https://mirrors.ustc.edu.cn/debian/ bullseye-updates main non-free contrib
+deb-src https://mirrors.ustc.edu.cn/debian/ bullseye-updates main non-free contrib
+deb https://mirrors.ustc.edu.cn/debian/ bullseye-backports main non-free contrib
+deb-src https://mirrors.ustc.edu.cn/debian/ bullseye-backports main non-free contrib
+
+ctrl+x，y，回车
+
+更新
+apt update
+apt upgrade -y
+
+4、一键安装Docker
+apt install curl -y
+curl -sSL https://get.daocloud.io/docker | sh
